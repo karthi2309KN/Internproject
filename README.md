@@ -19,6 +19,11 @@ npm run build
 ```
 npm run lint
 ```
+### Vuex 
+```
+npm install vuex@next --save
+```
+
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
