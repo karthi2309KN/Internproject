@@ -40,9 +40,9 @@
 							<th style="width:10%"></th>
 						</tr>
 						</thead>
-						<tbody  v-for=" post in displayedPosts" :key="post.id">
+						<tbody v-for=" post in displayedPosts" :key="post.id">
 						<td>{{post.id}}.</td>
-						<td >{{post.title}}</td>
+						<td>{{post.title}}</td>
 						<td>{{post.body.slice(0, 120)}}...</td>
 						<td class="project-actions text-right">
 							<router-link class="btn btn-info btn-sm" :to="'/update/'+post.id">
@@ -59,12 +59,11 @@
 					</div>
 			</div>
 			<div class="clearfix btn-group col-md-2 offset-md-5">
-				<button type="button" class="btn btn-sm btn-outline-secondary" v-if="page != 1" @click="page--"> &lt;&lt; </button>
-				<button type="button" class="btn btn-sm btn-outline-secondary" v-for="pageNumber in pages.slice(page-1, page+5)" @click="page = pageNumber"> {{pageNumber}} </button>
-				<button type="button" @click="page++" v-if="page < pages.length" class="btn btn-sm btn-outline-secondary"> &gt;&gt; </button>
+				<button  class="btn btn-primary btn-sm page-link"  v-if="page != 1" @click="page--"> &lt;&lt; </button>
+				<button  class=" btn btn-sm btn-primary page-link " v-for="pageNumber in pages.slice(page-1, page+1)" @click="page = pageNumber"> {{pageNumber}} </button>
+				<button  @click="page++" v-if="page < pages.length" class="btn btn-primary btn-sm page-link"> &gt;&gt; </button>
 			</div>
 		</section>
-	
 	</div>
 	
 	<footer class="main-footer">
@@ -85,7 +84,8 @@
 <script>
 import axios from 'axios';
 export default {
-	name:"ItemsTodo",data() {
+	name:"ItemsTodo",
+		data() {
 		return {
 			isActive:false,
 			id:null,
@@ -110,6 +110,7 @@ export default {
 					this.posts=response.data;
 				})
 				.catch(response => {
+						this.loading = false;
 					console.log(response);
 				});
 		},setPages() {
@@ -134,9 +135,9 @@ export default {
 						cancelButtonColor: '#d33',
 						confirmButtonText: 'Yes, delete it!'
 				}).then((result) => {
+						this.loading = true;
 			axios.delete(`https://jsonplaceholder.typicode.com/posts/`+this.id)
 			.then(response => {
-					this.loading = true;
 					if (result.isConfirmed) {
 						this.posts.splice(id,1);
 						Swal.fire(
@@ -144,8 +145,9 @@ export default {
 								'Your file has been deleted.',
 								'success'
 						)
+							this.loading = false;
+							console.log(response)
 					}
-					this.loading = false;
 				})
 			})
 			.catch(response => {
