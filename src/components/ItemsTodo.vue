@@ -88,11 +88,11 @@ export default {
 		data() {
 		return {
 			isActive:false,
+				posts:[],
 			id:null,
 			userId:null,
 			title:'',
 			body:'',
-			posts:[],
 			baseUrl:'https://jsonplaceholder.typicode.com/posts/',
 			page:1,
 			perPage:10,
@@ -104,17 +104,9 @@ export default {
 			this.$router.push('/add')
 		},toggle(){
 			this.isActive= !this.isActive;
-		},getPosts() {
-				axios.get(this.baseUrl)
-				.then(response => {
-					this.posts=response.data;
-				})
-				.catch(response => {
-						this.loading = false;
-					console.log(response);
-				});
-		},setPages() {
-			let numberOfPages=Math.ceil(this.posts.length / this.perPage);
+		},
+				setPages() {
+			let numberOfPages=Math.ceil(this.users.length / this.perPage);
 			for (let index=1; index <= numberOfPages; index++) {
 				this.pages.push(index);
 			}
@@ -157,17 +149,20 @@ export default {
 		}
 	},
 	computed:{
+			users() {
+					return this.$store.state['users'];
+			},
 		displayedPosts() {
-			return this.paginate(this.posts);
+			return this.paginate(this.users);
 		}
 		
 	},watch:{
-		posts() {
+		users() {
 			this.setPages();
 		},
 	},
-	created () {
-		this.getPosts();
+	mounted () {
+			this.$store.dispatch('fetchUsers');
 	}
 }
 </script>
