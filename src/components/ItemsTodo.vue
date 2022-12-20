@@ -40,7 +40,9 @@
 							<th style="width:10%"></th>
 						</tr>
 						</thead>
-						<tbody v-for=" post in displayedPosts" :key="post.id">
+						<tbody
+								v-for="post in displayedPosts"
+								:key="post.id">
 						<td>{{post.id}}.</td>
 						<td>{{post.title}}</td>
 						<td>{{post.body.slice(0, 120)}}...</td>
@@ -60,7 +62,7 @@
 			</div>
 			<div class="clearfix btn-group col-md-2 offset-md-5">
 				<button  class="btn btn-primary btn-sm page-link"  v-if="page != 1" @click="page--"> &lt;&lt; </button>
-				<button  class=" btn btn-sm btn-primary page-link " v-for="pageNumber in pages.slice(page-1, page+1)" @click="page = pageNumber"> {{pageNumber}} </button>
+				<button  class=" btn btn-sm btn-primary page-link" v-for="pageNumber in pages.slice(page-1, page+5)" @click="page = pageNumber"> {{pageNumber}} </button>
 				<button  @click="page++" v-if="page < pages.length" class="btn btn-primary btn-sm page-link"> &gt;&gt; </button>
 			</div>
 		</section>
@@ -117,7 +119,7 @@ export default {
 			let to=(page * perPage);
 			return posts.slice(from,to);
 		},
-		deletePost(posts,id){
+		deletePost(users,id){
 				Swal.fire({
 						title: 'Are you sure?',
 						text: "You won't be able to revert this!",
@@ -127,23 +129,23 @@ export default {
 						cancelButtonColor: '#d33',
 						confirmButtonText: 'Yes, delete it!'
 				}).then((result) => {
-						this.loading = true;
-			axios.delete(`https://jsonplaceholder.typicode.com/posts/`+this.id)
+						this.loading = true
+			axios.delete(`https://jsonplaceholder.typicode.com/posts/`+users.id)
 			.then(response => {
 					if (result.isConfirmed) {
-						this.posts.splice(id,1);
+						this.users.splice(users.id,1);
 						Swal.fire(
 								'Deleted!',
 								'Your file has been deleted.',
 								'success'
 						)
-							this.loading = false;
+							this.loading = false
 							console.log(response)
 					}
 				})
 			})
 			.catch(response => {
-					this.loading = false;
+					this.loading = false
 				console.log(response);
 			});
 		}
@@ -168,9 +170,9 @@ export default {
 </script>
 
 <style scoped>
-button{
-	margin-bottom: 0.5rem;
+.btn{
 	margin-left: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 .clearfix{
 	margin-top:0.5rem ;
